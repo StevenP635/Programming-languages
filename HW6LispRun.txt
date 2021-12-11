@@ -1,0 +1,66 @@
+;;; Author: Steven Paredes
+;;; UTSA ABC: obr635
+;;; CS3723
+;;; Assignment 6
+
+; comment on the assignment: this was fairly challenging but I was able to get it done. I just want to know how we were supposed to do the extra credit. Im stumped to say the least
+
+;;;  #1 removeNILTop DONE
+
+(defun removeNILTop (array)
+    (cond ((NULL array) NIL) ; if list is null stop
+          ((NULL (car array)) (removeNILTop( cdr array))) ; if car is null discard it and contiune with the rest
+          (t (cons( car array) (removeNILTop( cdr array)))) ; if car is not null keep it in the list and contiune
+    )
+)
+(removeNILTop '(NIL X NIL NIL Y  NIL Z))
+(removeNILTop '(X NIL Y NIL Z NIL))
+(removeNILTop '(NIL (X NIL Y) (NIL NIL)))
+
+;;; #2 removeNILMost DONE
+
+(defun removeNILMost (array)
+    (cond ((NULL array) NIL) ; if list is null stop
+          ((NULL (car array)) (removeNILMost(cdr array))) ; if car is null discard it and contiune with the rest
+          ((Listp (car array)) (cons(removeNILMost(car array)) (removeNILMost(cdr array)))) ; if car is a list pass that list recursively, pass the rest of the list
+          (t  (cons(car array) (removeNILMost(cdr array)))) ; if car is not null keep it in the list and contiune
+    )
+)
+
+(removeNILMost '(NIL X NIL NIL Y  NIL Z))
+(removeNILMost '(X NIL (Y NIL Z) NIL))
+(removeNILMost '(NIL (NIL) (X NIL Y) (NIL NIL) Z))
+(removeNILMost '(NIL ( (((((NIL) NIL)))))))
+
+;;; #3 reverseTop DONE
+
+(defun reverseTop (array)
+	(cond ((NULL array) array) ; if list is null stop
+		(t (append (reverseTop (cdr array)) (list (car array)))) ;if car is not null put the first part of the list in the back and contiune with the rest
+	)
+)
+
+(reverseTop '(X Y Z))
+(reverseTop '(X (Y Z (A)) (W)))
+
+;;; #4 reverseALL DONE
+
+(defun reverseAll (array)
+	(cond((NULL array) array) ; if list is null stop
+		((Listp (car array)) (append (reverseAll(cdr array)) (list(reverseAll(car array))))) ; if car is a list pass the rest of the list to reverseALL, then put the car list in the back and pass it to reverseALL
+		(t (append (reverseAll(cdr array)) (list(car array)))) ; if car is not null put the first part of the list in the back and contiune with the rest
+	)
+)
+
+(reverseAll '(X Y Z))
+(reverseAll '(X (Y Z (A)) (W)))
+
+;;; #5 palindrome DONE
+
+(defun palindrome (array)
+	(equal array (reverseTop array)) ; if list is equal to reverseTop list return t if not return nil
+)
+
+(palindrome '(R A C E C A R))
+(palindrome '(W A S I T A C A R O R A C A T I S A W))
+(palindrome '(N I X O N))
